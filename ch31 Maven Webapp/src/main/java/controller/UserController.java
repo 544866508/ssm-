@@ -5,9 +5,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
- 
-
+import entity.User;
 import service.UserService;
  
 @Controller
@@ -17,11 +17,12 @@ public class UserController {
 	@Resource(name="UserService")
 	private UserService userService;
  
-	@RequestMapping("/findUserById")
+	@RequestMapping(value="/findUserById",method=RequestMethod.POST)
 	public String findUserById(int id, Model model) {
-		String username = userService.findUserById(id);
+		User username = userService.findUserById(id);
 		if (username != null) {
-			model.addAttribute("username", username);
+			model.addAttribute("name", username.getUserame());
+			model.addAttribute("id", username.getId());
 		} else {
 			model.addAttribute("username", "未找到");
 		}

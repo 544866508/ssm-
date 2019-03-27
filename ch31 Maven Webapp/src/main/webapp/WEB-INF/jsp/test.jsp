@@ -9,7 +9,8 @@
 </head>
  
 <body>
-	成功 名字是：${username }
+	成功 名字是：${name}<br>
+	id:${id }
  
 </body>
 </html>

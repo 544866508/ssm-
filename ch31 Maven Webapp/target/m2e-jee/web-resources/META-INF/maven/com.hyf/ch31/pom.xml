@@ -20,7 +20,7 @@
         <slf4j.version>1.6.6</slf4j.version>
         <log4j.version>1.2.12</log4j.version>
         <httpclient.version>4.1.2</httpclient.version>
-        <jackson.version>1.9.13</jackson.version>
+        <jackson.version>2.5.4</jackson.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <druid.version>1.0.5</druid.version>
         <tomcat.jdbc.version>7.0.53</tomcat.jdbc.version>
@@ -135,11 +135,26 @@
         </dependency>
 
         <!-- jackson -->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+        <!-- Spring4.1.1去掉了MappingJacksonHttpMessageConverter
+
+spring-mvc配置将MappingJacksonHttpMessageConverter改成MappingJackson2HttpMessageConverter，
+
+Maven对org.codehaus.jackson的引用，改用 com.fasterxml.jackson.core -->
+    	<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 
         <!-- log start -->
         <dependency>
@@ -294,6 +309,23 @@
     		<version>2.0</version>
     		<scope>provided</scope>
 		</dependency>
+		
+    <!-- mybatis pager -->    
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper</artifactId>
+      <version>4.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.miemiedev</groupId>
+      <artifactId>mybatis-paginator</artifactId>
+      <version>1.2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.jsqlparser</groupId>
+      <artifactId>jsqlparser</artifactId>
+      <version>0.9.4</version>
+    </dependency>
         
   </dependencies>
   <build>		  

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd    
+                        http://www.springframework.org/schema/context    
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+ 
+	<context:annotation-config />
+ 
+
+ 
+	<!-- 加载配置文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="location" value="classpath:jdbc.properties" />
+		<property name="fileEncoding" value="utf-8"/>
+	</bean>
+	<!-- 数据库连接池 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+
+		<!-- 最大活跃数 -->
+		<property name="maxActive" value="${maxActive}" />
+		<!-- #最大idle数 -->
+		<property name="maxIdle" value="${maxIdle}" />
+		<!-- 最小idle数 -->
+		<property name="minIdle" value="${minIdle}" />
+		<!-- 最长等待时间(毫秒) -->
+		<property name="maxWait" value="${maxWait}" />
+		<!-- 连接的超时时间，默认为半小时 -->
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+	</bean>
+ 
+
+ 
+ 
+ 	<!-- 3.配置SqlSessionFactory对象 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据库连接池 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置MyBaties全局配置文件:mybatis-config.xml -->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<!-- 扫描entity包 使用别名 -->
+		<property name="typeAliasesPackage" value="entity" />
+		<!-- 扫描sql配置文件:mapper需要的xml文件 -->
+		<property name="mapperLocations" value="classpath:mappers/*.xml" />
+		
+		<!-- 分页插件 -->
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageHelper">
+					<property name="properties">
+						<value>dialect=mysql</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+	
+
+
+
+	<!-- MapperScannerConfigurer：mapper的扫描器，将包下边的mapper接口自动创建代理对象， 自动创建到spring容器中，bean的id是mapper的类名（首字母小写） -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 配置扫描包的路径 如果要扫描多个包，中间使用半角逗号分隔 要求mapper.xml和mapper.java同名且在同一个目录 -->
+		<property name="basePackage" value="mapper" />
+		<!-- 使用sqlSessionFactoryBeanName -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	
+	
+
+</beans> 
