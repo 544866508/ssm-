@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %p %c [LineNumber:%L]: %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="debugLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<!-- 日志输出位置，${CATALINA_HOME}在系统环境变量中配置 -->
+        <file>${CATALINA_HOME}/logfiles/DEBUG.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %p %c [LineNumber:%L]: %m%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        	<!-- 滚动后，日志输出位置 -->
+            <fileNamePattern>${CATALINA_HOME}/logfiles/%d{yyyy-MM-dd,aux}/DEBUG-xxx.%d{yyyy-MM-dd_HH}.%i.log
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${CATALINA_HOME}/logfiles/ERROR.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %p %c [LineNumber:%L]: %m%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${CATALINA_HOME}/logfiles/%d{yyyy-MM-dd,aux}/ERROR-xxx.%d{yyyy-MM-dd_HH}.%i.log
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="console" />
+        <appender-ref ref="debugLog" />
+        <appender-ref ref="errorLog" />
+    </root>
+    
+    <logger name="com.test.pay.dao.impl" level="ERROR"/>
+    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="ERROR"/>
+    
+</configuration>
